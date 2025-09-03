@@ -1,6 +1,7 @@
 import pandas as pd
-from random import randint
+from random import randint, shuffle
 import openpyxl
+from datetime import date
 
 EXCEL_PATH = "staff.xlsx"
 STAFF_SHEET_NAME = "STAFF"
@@ -125,7 +126,7 @@ def add_clean_up(df):
         df.loc[rand_index, 'CLEAN_UP'] = True
         df.loc[rand_index, 'NUM_SHIFTS'] += 1
     return df
-
+    
 def shift_staff(df):
     df['NUM_SHIFTS'] = 0
     df = add_beer_delivery(df)
@@ -136,10 +137,41 @@ def shift_staff(df):
     df = add_clean_up(df)
     return df
 
+def get_and_shuffle(df, col_name):
+    lst = df.loc[df[col_name], 'NAME'].tolist()
+    shuffle(lst)
+    return lst
+
 def fill_template(df):
     wb = openpyxl.load_workbook(EXCEL_PATH)
     ws = wb[SCHEDULE_SHEET_NAME]
-    ws['J9'] = "Matthew"
+
+    ws['B3'] = f"MUS 4À7 SCHEDULE ({date.today()})"
+
+    beer_delivery_names = get_and_shuffle(df, 'BEER_DELIVERY')
+    for i, cell in enumerate(BEER_DELIVERY_CELLS):
+        ws[cell] = beer_delivery_names[i]
+
+    set_up_names = get_and_shuffle(df, 'SET_UP')
+    for i, cell in enumerate(SET_UP_CELLS):
+        ws[cell] = set_up_names[i]
+
+    names_5a6 = get_and_shuffle(df, '5A6')
+    for i, cell in enumerate(CELLS_5A6):
+        ws[cell] = names_5a6[i]
+
+    names_6a7 = get_and_shuffle(df, '6A7')
+    for i, cell in enumerate(CELLS_6A7):
+        ws[cell] = names_6a7[i]
+
+    names_7a8 = get_and_shuffle(df, '7A8')
+    for i, cell in enumerate(CELLS_7A8):
+        ws[cell] = names_7a8[i]
+
+    clean_up_names = get_and_shuffle(df, 'CLEAN_UP')
+    for i, cell in enumerate(CLEAN_UP_CELLS):
+        ws[cell] = clean_up_names[i]
+
     wb.save(EXCEL_PATH)
 
 def main():
