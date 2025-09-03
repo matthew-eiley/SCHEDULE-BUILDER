@@ -32,11 +32,32 @@ def add_beer_delivery(df):
             continue
         inds_used.append(rand_index)
         df.at[rand_index, 'BEER_DELIVERY'] = True
-        print(df.iloc[rand_index])
+
+def add_set_up(df):
+    inds_used = []
+    df['SET_UP'] = False
+    while len(inds_used) < 11:
+        rand_index = randint(0, len(df)-1)
+        if rand_index in inds_used:
+            continue
+        inds_used.append(rand_index)
+        df.at[rand_index, 'SET_UP'] = True
+
+def add_clean_up(df):
+    inds_used = []
+    df['CLEAN_UP'] = False
+    while len(inds_used) < 12:
+        rand_index = randint(0, len(df)-1)
+        if (rand_index in inds_used) or df.loc[rand_index, 'SET_UP']:
+            continue
+        inds_used.append(rand_index)
+        df.at[rand_index, 'CLEAN_UP'] = True
 
 def main():
     df = read_staff_excel(EXCEL_PATH)
     add_beer_delivery(df)
+    add_set_up(df)
+    add_clean_up(df)
     print(df)
 
 if __name__ == "__main__":
