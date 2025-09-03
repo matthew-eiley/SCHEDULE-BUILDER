@@ -31,7 +31,8 @@ def add_beer_delivery(df):
         if rand_index in inds_used:
             continue
         inds_used.append(rand_index)
-        df.at[rand_index, 'BEER_DELIVERY'] = True
+        df['BEER_DELIVERY'].iloc[rand_index] = True
+        df['NUM_SHIFTS'].iloc[rand_index] += 1
 
 def add_set_up(df):
     inds_used = []
@@ -41,22 +42,60 @@ def add_set_up(df):
         if rand_index in inds_used:
             continue
         inds_used.append(rand_index)
-        df.at[rand_index, 'SET_UP'] = True
+        df['SET_UP'].iloc[rand_index] = True
+        df['NUM_SHIFTS'].iloc[rand_index] += 1
+
+def add_5a6(df):
+    inds_used = []
+    df['5A6'] = False
+    while len(inds_used) < 14:
+        rand_index = randint(0, len(df)-1)
+        if (rand_index in inds_used) or ():
+            continue
+        inds_used.append(rand_index)
+        df['5A6'].iloc[rand_index] = True
+        df['NUM_SHIFTS'].iloc[rand_index] += 1
+
+def add_6a7(df):
+    inds_used = []
+    df['6A7'] = False
+    while len(inds_used) < 14:
+        rand_index = randint(0, len(df)-1)
+        if (rand_index in inds_used) or ():
+            continue
+        inds_used.append(rand_index)
+        df['6A7'].iloc[rand_index] = True
+        df['NUM_SHIFTS'].iloc[rand_index] += 1
+
+def add_7a8(df):
+    inds_used = []
+    df['7A8'] = False
+    while len(inds_used) < 14:
+        rand_index = randint(0, len(df)-1)
+        if (rand_index in inds_used) or ():
+            continue
+        inds_used.append(rand_index)
+        df['7A8'].iloc[rand_index] = True
+        df['NUM_SHIFTS'].iloc[rand_index] += 1
 
 def add_clean_up(df):
     inds_used = []
     df['CLEAN_UP'] = False
     while len(inds_used) < 12:
         rand_index = randint(0, len(df)-1)
-        if (rand_index in inds_used) or df.loc[rand_index, 'SET_UP']:
+        if (rand_index in inds_used):
             continue
         inds_used.append(rand_index)
         df.at[rand_index, 'CLEAN_UP'] = True
 
 def main():
     df = read_staff_excel(EXCEL_PATH)
+    df['NUM_SHIFTS'] = 0
     add_beer_delivery(df)
     add_set_up(df)
+    add_5a6(df)
+    add_6a7(df)
+    add_7a8(df)
     add_clean_up(df)
     print(df)
 
