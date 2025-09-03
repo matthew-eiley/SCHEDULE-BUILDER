@@ -28,7 +28,7 @@ def add_beer_delivery(df):
     df['BEER_DELIVERY'] = False
     while len(inds_used) < 5:
         rand_index = randint(0, len(df)-1)
-        if rand_index in inds_used:
+        if (rand_index in inds_used) or (df['NUM_SHIFTS'].iloc[rand_index] >= 2):
             continue
         inds_used.append(rand_index)
         df['BEER_DELIVERY'].iloc[rand_index] = True
@@ -39,7 +39,7 @@ def add_set_up(df):
     df['SET_UP'] = False
     while len(inds_used) < 11:
         rand_index = randint(0, len(df)-1)
-        if rand_index in inds_used:
+        if (rand_index in inds_used) or (df['NUM_SHIFTS'].iloc[rand_index] >= 2):
             continue
         inds_used.append(rand_index)
         df['SET_UP'].iloc[rand_index] = True
@@ -50,7 +50,7 @@ def add_5a6(df):
     df['5A6'] = False
     while len(inds_used) < 14:
         rand_index = randint(0, len(df)-1)
-        if (rand_index in inds_used) or ():
+        if (rand_index in inds_used) or (df['NUM_SHIFTS'].iloc[rand_index] >= 2):
             continue
         inds_used.append(rand_index)
         df['5A6'].iloc[rand_index] = True
@@ -61,7 +61,7 @@ def add_6a7(df):
     df['6A7'] = False
     while len(inds_used) < 14:
         rand_index = randint(0, len(df)-1)
-        if (rand_index in inds_used) or ():
+        if (rand_index in inds_used) or (df['NUM_SHIFTS'].iloc[rand_index] >= 2):
             continue
         inds_used.append(rand_index)
         df['6A7'].iloc[rand_index] = True
@@ -72,7 +72,7 @@ def add_7a8(df):
     df['7A8'] = False
     while len(inds_used) < 14:
         rand_index = randint(0, len(df)-1)
-        if (rand_index in inds_used) or ():
+        if (rand_index in inds_used) or (df['NUM_SHIFTS'].iloc[rand_index] >= 2):
             continue
         inds_used.append(rand_index)
         df['7A8'].iloc[rand_index] = True
@@ -83,10 +83,11 @@ def add_clean_up(df):
     df['CLEAN_UP'] = False
     while len(inds_used) < 12:
         rand_index = randint(0, len(df)-1)
-        if (rand_index in inds_used):
+        if (rand_index in inds_used) or (df['NUM_SHIFTS'].iloc[rand_index] >= 2):
             continue
         inds_used.append(rand_index)
-        df.at[rand_index, 'CLEAN_UP'] = True
+        df['CLEAN_UP'].iloc[rand_index] = True
+        df['NUM_SHIFTS'].iloc[rand_index] += 1
 
 def main():
     df = read_staff_excel(EXCEL_PATH)
