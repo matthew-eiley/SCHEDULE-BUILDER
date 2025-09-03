@@ -33,6 +33,7 @@ def add_beer_delivery(df):
         inds_used.append(rand_index)
         df['BEER_DELIVERY'].iloc[rand_index] = True
         df['NUM_SHIFTS'].iloc[rand_index] += 1
+    return df
 
 def add_set_up(df):
     inds_used = []
@@ -44,6 +45,7 @@ def add_set_up(df):
         inds_used.append(rand_index)
         df['SET_UP'].iloc[rand_index] = True
         df['NUM_SHIFTS'].iloc[rand_index] += 1
+    return df
 
 def add_5a6(df):
     inds_used = []
@@ -55,6 +57,7 @@ def add_5a6(df):
         inds_used.append(rand_index)
         df['5A6'].iloc[rand_index] = True
         df['NUM_SHIFTS'].iloc[rand_index] += 1
+    return df
 
 def add_6a7(df):
     inds_used = []
@@ -66,6 +69,7 @@ def add_6a7(df):
         inds_used.append(rand_index)
         df['6A7'].iloc[rand_index] = True
         df['NUM_SHIFTS'].iloc[rand_index] += 1
+    return df
 
 def add_7a8(df):
     inds_used = []
@@ -77,6 +81,7 @@ def add_7a8(df):
         inds_used.append(rand_index)
         df['7A8'].iloc[rand_index] = True
         df['NUM_SHIFTS'].iloc[rand_index] += 1
+    return df
 
 def add_clean_up(df):
     inds_used = []
@@ -88,16 +93,22 @@ def add_clean_up(df):
         inds_used.append(rand_index)
         df['CLEAN_UP'].iloc[rand_index] = True
         df['NUM_SHIFTS'].iloc[rand_index] += 1
+    return df
+
+def shift_staff(df):
+    df['NUM_SHIFTS'] = 0
+    df = add_beer_delivery(df)
+    df = add_set_up(df)
+    df = add_5a6(df)
+    df = add_6a7(df)
+    df = add_7a8(df)
+    df = add_clean_up(df)
+    return df
+    return df
 
 def main():
     df = read_staff_excel(EXCEL_PATH)
-    df['NUM_SHIFTS'] = 0
-    add_beer_delivery(df)
-    add_set_up(df)
-    add_5a6(df)
-    add_6a7(df)
-    add_7a8(df)
-    add_clean_up(df)
+    df = shift_staff(df)
     print(df)
 
 if __name__ == "__main__":
