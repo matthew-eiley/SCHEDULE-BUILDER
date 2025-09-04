@@ -3,9 +3,10 @@ from random import randint, shuffle
 import openpyxl
 from datetime import date
 
-EXCEL_PATH = "staff.xlsx"
+EXCEL_PATH = "chief_of_staff.xlsx"
 STAFF_SHEET_NAME = "STAFF"
-SCHEDULE_SHEET_NAME = "SCHEDULE"
+SCHEDULE_SHEET_NAME = "SCHEDULE TEMPLATE"
+TODAY = date.today()
 BEER_DELIVERY_CELLS = [
     'J9', 'J10', 'J11', 'J12', 'J13'
 ]
@@ -144,9 +145,11 @@ def get_and_shuffle(df, col_name):
 
 def fill_template(df):
     wb = openpyxl.load_workbook(EXCEL_PATH)
-    ws = wb[SCHEDULE_SHEET_NAME]
+    source = wb[SCHEDULE_SHEET_NAME]
+    ws = wb.copy_worksheet(source)
+    ws.title = f"SCHEDULE {TODAY}"
 
-    ws['B3'] = f"MUS 4À7 SCHEDULE ({date.today()})"
+    ws['B3'] = f"MUS 4À7 SCHEDULE ({TODAY})"
 
     beer_delivery_names = get_and_shuffle(df, 'BEER_DELIVERY')
     for i, cell in enumerate(BEER_DELIVERY_CELLS):
@@ -171,6 +174,17 @@ def fill_template(df):
     clean_up_names = get_and_shuffle(df, 'CLEAN_UP')
     for i, cell in enumerate(CLEAN_UP_CELLS):
         ws[cell] = clean_up_names[i]
+
+    not_shifted = df[df['NUM_SHIFTS'] == 0]['NAME'].tolist()
+    single_shifted = df[df['NUM_SHIFTS'] == 1]['NAME'].tolist()
+    double_shifted = df[df['NUM_SHIFTS'] == 2]['NAME'].tolist()
+
+    for i, name in enumerate(not_shifted):
+        ws[f'S{11+i}'] = name
+    for i, name in enumerate(single_shifted):
+        ws[f'U{11+i}'] = name
+    for i, name in enumerate(double_shifted):
+        ws[f'W{11+i}'] = name
 
     wb.save(EXCEL_PATH)
 
